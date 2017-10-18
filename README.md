@@ -16,7 +16,7 @@ List provided:
       Andres
       Jacob
 
- The expected output for the project is:
+ The expected output for the project when executing for the first time is:
  
  
       - amin
