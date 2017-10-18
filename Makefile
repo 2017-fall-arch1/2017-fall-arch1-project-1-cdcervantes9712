@@ -6,7 +6,7 @@ CFLAGS=-g -O3
 #   $@ is the production's target
 #   $^ are the production's prerequisites
 
-bstDemo: bstree.o bstree.o
+bstDemo: bstree.o bstDemo.c
 	cc -o $@ $^
 
 bstree.o: bstree.c bstree.h
