@@ -1,5 +1,6 @@
 #ifndef bstree_included
 #define bstree_included
+/* Jorge Guijosa helped me understand some concepts of implementing a BST in C */
 
 /* A Binary Search Tree node */
 typedef struct BSTNode_s {
@@ -23,30 +24,30 @@ void bstFree(BSTree *tree);
 void bstMakeEmpty(BSTree *tree);
 
 /* Removes all nodes of the tree recursively in post-order */
-void emptyBst(BSTNode *root);
+void emptyBst(BSTNode *node);
 
 /* Insert to tree. Used llist demo files as reference. */
-void bstAdd(BSTree *tree, char *str);
+void bstAdd(BSTree *tree, char *name);
 
 /* Print the strings of each node. If the tree is empty, prints a message. */
 void bstPrint(BSTree *tree);
 
 /* Recursive printing of the tree in order */
-void recPrint(BSTNode *root);
+void recPrint(BSTNode *node);
 
 /* Print to file */
-void bstPrintToFile(BSTree *tree, FILE *fp);
+void bstFilePrinter(BSTree *tree, FILE *file);
 
 /* Recursive printing of the tree to a file */
-void recPrintToFile(BSTNode *root, FILE *fp);
+void recFilePrinter(BSTNode *node, FILE *file);
 
 /* Removes a node from the tree */
-void bstRemove(BSTree *tree, char *removee);
+void bstDelete(BSTree *tree, char *name);
 
 /* Recursively remove a node form a tree*/
-BSTNode *recursiveRemove(BSTNode *root, char *removee);
+BSTNode *recDelete(BSTNode *node, char *name);
 
 /* Find minimum element in a tree*/
-BSTNode *findMin(BSTNode *root);
+BSTNode *findMin(BSTNode *node);
 
 #endif /* included */

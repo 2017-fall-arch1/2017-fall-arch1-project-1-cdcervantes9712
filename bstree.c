@@ -5,7 +5,7 @@
 #include <ctype.h>             /* for tolower */
 #include <stdio.h>             /* for input output ops*/
 #include "bstree.h"
-
+/* Jorge Guijosa helped me understand some concepts of implementing a BST in C */
 
 /* Create a new tree */
 BSTree *bstAlloc() {
@@ -23,39 +23,39 @@ void bstFree(BSTree *tree) {
 
 /* Delete all elements off of the tree */
 void bstMakeEmpty(BSTree *tree) {
-	BSTNode *root = tree->root;
-	emptyBst(root);
+	BSTNode *node = tree->root;
+	emptyBst(node);
 	tree->root = 0;
 }
 
 /* Removes all nodes of the tree recursively in post-order */
-void emptyBst(BSTNode *root) {
-	if(root == 0){
+void emptyBst(BSTNode *node) {
+	if(node == 0) {
 		return;
 	}
-	emptyBst(root->left);
-	root->left = 0;
-	emptyBst(root->right);
-	root->right = 0;
-	free(root->str);
-	free(root);
+	emptyBst(node->left);
+	node->left = 0;
+	emptyBst(node->right);
+	node->right = 0;
+	free(node->str);
+	free(node);
 }
 
 /* Insert to tree. Used llist demo files as reference. */
-void bstAdd(BSTree *tree, char *str) {
+void bstAdd(BSTree *tree, char *name) {
 	int sLen,i;
 	char inserted = 0;
 	char *copy;
 	BSTNode *insertee, *checker = tree->root;
 	/* compute length of the string */
-	for (i = 0; str[i]; i++){
-		str[i] = tolower(str[i]);
+	for (i = 0; name[i]; i++){
+		name[i] = tolower(name[i]);
 	}
-	for (sLen = 0; str[sLen]; sLen++);
+	for (sLen = 0; name[sLen]; sLen++);
 	copy = (char *) malloc(sLen+1);
 	/* copy input string into copy variable */
-	for (sLen = 0; str[sLen]; sLen++){
-		copy[sLen] = str[sLen];
+	for (sLen = 0; name[sLen]; sLen++){
+		copy[sLen] = name[sLen];
 	}
 	copy[sLen] = 0;
 
@@ -108,85 +108,85 @@ void bstPrint(BSTree *tree) {
 }
 
 /* Recursive printing of the tree in order */
-void recPrint(BSTNode *root) {
+void recPrint(BSTNode *node) {
 	BSTNode *visit;
-	if(root == 0){
+	if(node == 0){
 		return;
 	}
 	else{
-		recPrint(visit = root->left);
-		printf("<%s>\n",root->str);
-		recPrint(visit = root->right);
+		recPrint(visit = node->left);
+		printf("- %s\n", node->str);
+		recPrint(visit = node->right);
 	}
 }
 
 /* Print to file */
-void bstPrintToFile(BSTree *tree, FILE *fp) {
-	if(tree->root == 0){
-		fputs("There are no employees to display.\n", fp);
+void bstFilePrinter(BSTree *tree, FILE *file) {
+	if(tree->root == 0) {
+		fputs("There are no employees to display.\n", file);
 	}
 	else{
-		recPrintToFile(tree->root,fp);
-		fputs("\n",fp);
+		recFilePrinter(tree->root,file);
+		fputs("\n",file);
 	}
 }
 /* Recursive printing of the tree to a file */
-void recPrintToFile(BSTNode *root, FILE *fp) {
-	if(root == 0){
+void recFilePrinter(BSTNode *node, FILE *file) {
+	if(node == 0){
 		return;
 	}
 	else{
-		fprintf(fp,"%s\n",root->str);
-		recPrintToFile(root->left,fp);
-		recPrintToFile(root->right,fp);
+		fprintf(file,"%s\n",node->str);
+		recFilePrinter(node->left,file);
+		recFilePrinter(node->right,file);
 	}
 }
 
 /* Removes a node from the tree */
-void bstRemove(BSTree *tree, char *removee) {
-	BSTNode *root = tree->root;
-	recursiveRemove(root,removee);
+void bstDelete(BSTree *tree, char *name) {
+	BSTNode *node = tree->root;
+	recDelete(node, name);
 }
 
 /* Recursively remove a node form a tree*/
-BSTNode *recursiveRemove(BSTNode *root, char *removee) {
-	if(root == 0){
-		puts("Not found");
-		return root;
+BSTNode *recDelete(BSTNode *node, char *name) {
+	if(node == 0){
+		puts("Employee not found");
+		return node;
 	}
-	int cmpRes = (strcmp(root->str,removee));
+	int cmpRes = (strcmp(node->str, name));
 	if (cmpRes > 0){
-		root->left = recursiveRemove(root->left,removee);
+		node->left = recDelete(node->left, name);
 	}
 	else if(cmpRes < 0){
-		root->right = recursiveRemove(root->right,removee);
+		node->right = recDelete(node->right, name);
 	}
-	else if((root->left != 0) && (root->right != 0)){
-		root->str = findMin(root->right)->str;
+	else if((node->left != 0) && (node->right != 0)){
+		node->str = findMin(node->right)->str;
 		puts("removing less of drive");
-		root->right = recursiveRemove(root->right, root->str);
+		node->right = recDelete(node->right, node->str);
 	}
 	else{
-		if(root->left != 0){
-			BSTNode *temp = root;
-			root = root->left;
+		if(node->left != 0) {
+			BSTNode *temp = node;
+			node = node->left;
 			free(temp->str);
 			free(temp);
 		}
 		else{
-			BSTNode *temp = root;
-			root = root->right;
+			BSTNode *temp = node;
+			node = node->right;
 			free(temp->str);
 			free(temp);
 		}
 	}
-	return root;
+	return node;
 }
 
 /* Find minimum element in a tree*/
-BSTNode *findMin(BSTNode *root) {
-	while(root->left){
-		root = root->left;
+BSTNode *findMin(BSTNode *node) {
+	while(node->left){
+		node = node->left;
 	}
-	return root;
+	return node;
 }
