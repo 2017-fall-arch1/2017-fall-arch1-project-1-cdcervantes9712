@@ -5,7 +5,6 @@
 #include <ctype.h>             /* for tolower */
 #include <stdio.h>             /* for input output ops*/
 #include "bstree.h"
-/* Jorge Guijosa helped me understand some concepts of implementing a BST in C */
 
 /* Create a new tree */
 BSTree *bstAlloc() {

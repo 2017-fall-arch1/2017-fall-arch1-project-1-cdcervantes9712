@@ -1,6 +1,5 @@
 #ifndef bstree_included
 #define bstree_included
-/* Jorge Guijosa helped me understand some concepts of implementing a BST in C */
 
 /* A Binary Search Tree node */
 typedef struct BSTNode_s {
